@@ -1,23 +1,30 @@
-import logo from './logo.svg';
+import { useState } from "react";
+
 import './App.css';
+import RegularList from './components/RegularList';
+import RegularTaskView from "./components/RegularTaskView";
+
+const DUMMY_DATA = [{
+  id: 1,
+  name: "bla"
+},
+{
+  id: 2,
+  name: "task"
+}];
 
 function App() {
+  const [currentItem, setCurrentItem] = useState(null);
+
+  const selectItemHandler = (item) => {
+    console.log("Set current item: " + item.name);
+    setCurrentItem(item);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <RegularList items={DUMMY_DATA} onSelect={selectItemHandler} />
+      {currentItem !== null && <RegularTaskView item={currentItem} />}
     </div>
   );
 }
