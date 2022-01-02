@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import TaskButtons from './TaskButtons';
+
+import classes from "./RegularTaskView.module.css";
 
 const DUMMY_DATA = [{
   taskid: 1,
@@ -26,40 +29,23 @@ function RegularTaskView(props) {
   const currentData = DUMMY_DATA.find(d => d.taskid === props.taskId);
   const [currentHistory, setCurrentHistory] = useState(currentData.history);
 
-  const addTodayHandler = (event) => {
-    event.preventDefault();
-    console.log("Add today");
+  const addDay = (day) => {
+    console.log("Add day: " + day);
     setCurrentHistory(prevHistory => {
-      return [{date: new Date()}, ...prevHistory]
+      return [{date: day}, ...prevHistory] 
     })
-  }
-
-  const addYesterdayHandler = (event) => {
-    event.preventDefault();
-    setCurrentHistory(prevHistory => {
-      return [{date: new Date(-1)}, ...prevHistory] // todo ken how to do yesterday
-    })
-  }
-
-  const addDayHandler = (event) => {
-    event.preventDefault();
-    console.log("Add day"); // todo ken open modal?
   }
 
   function TaskView(props) {
     return (
       <>
-      <div>
-        <button onClick={addYesterdayHandler}>Add Yesterday</button>
-        <button onClick={addTodayHandler}>Add Today</button>
-        <button onClick={addDayHandler}>Add Day</button>
-      </div>
+        <TaskButtons onAddDay={addDay} />
       <div>{props.data.name}</div>
       <div>Interval: {props.data.interval}</div>
-      <div>Next due: {props.data.due.toLocaleString()}</div>
-      <ul>
+      <div>Next due: {props.data.due.toLocaleDateString()}</div>
+      <ul className={classes.dates}>
         {currentHistory.map(h => {
-          return <li key={h.taskId}>{h.date.toLocaleString()}</li>
+          return <li key={h.taskId}>{h.date.toLocaleDateString()}</li>
         })}
       </ul>
       </>
